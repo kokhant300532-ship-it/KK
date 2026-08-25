@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dashboard & Control Panel</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Control Panel Sidebar (Leftmost) */
+        .control-panel {
+            width: 320px;
+            background-color: #ffffff;
+            border-right: 2px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .cp-header {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cp-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .cp-group {
+            margin-bottom: 20px;
+        }
+
+        .cp-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cp-group input, .cp-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .cp-group input:focus {
+            border-color: #0046ad;
+        }
+
+        .cp-section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #0f172a;
+            margin: 15px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        /* Original App Sidebar */
+        .sidebar {
+            width: 210px;
+            background-color: #0046ad;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: background 0.3s;
+        }
+
+        .brand {
+            padding: 20px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .brand i {
+            font-size: 26px;
+            color: #ffdb00;
+        }
+
+        .menu-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .menu-item {
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        /* Main Workspace Section */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Top Navbar */
+        .topbar {
+            background-color: #0046ad;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 10px;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s;
+        }
+
+        .nav-item {
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 15px;
+        }
+
+        /* Filter Controls Bar */
+        .filter-bar {
+            background: white;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+        }
+
+        .filter-input {
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 4px;
+            outline: none;
+            color: #0046ad;
+            font-weight: bold;
+        }
+
+        .btn-query {
+            background-color: #0046ad;
+            color: white;
+            border: none;
+            padding: 7px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        /* Content Container */
+        .content-container {
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Modal Card Structure */
+        .modal-card {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .modal-header {
+            background-color: #d91414;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .modal-body {
+            padding: 25px 35px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .info-pane {
+            flex-grow: 1;
+        }
+
+        .notice-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .highlight-blue {
+            color: #0046ad;
+        }
+
+        .highlight-red {
+            color: #d91414;
+            font-weight: bold;
+        }
+
+        .details-list {
+            text-align: center;
+            line-height: 1.8;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .details-list div {
+            margin-bottom: 4px;
+        }
+
+        .sub-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .btn-confirm {
+            background-color: #0046ad;
+            color: white;
+            border: none;
+            width: 160px;
+            padding: 10px 0;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: bold;
+            margin: 25px auto 0 auto;
+            display: block;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        /* Alert Side Icon */
+        .warning-pane {
+            width: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px dashed #e2e8f0;
+            padding-left: 15px;
+        }
+
+        .warning-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #fff5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .warning-icon {
+            font-size: 45px;
+            color: #f59e0b;
+        }
+
+        .warning-title {
+            color: #d91414;
+            font-weight: bold;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .warning-subtitle {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Footer Banner */
+        .footer-banner {
+            background-color: #e8f2ff;
+            color: #0046ad;
+            padding: 10px 20px;
+            font-size: 12px;
+            border-radius: 4px;
+            margin: 20px 30px 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CONTROL PANEL (SETTINGS SIDEBAR) -->
+    <div class="control-panel">
+        <div class="cp-header">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Live Control Settings</span>
+        </div>
+        <div class="cp-body">
+            
+            <div class="cp-section-title">User Details</div>
+            
+            <div class="cp-group">
+                <label>User ID</label>
+                <input type="text" id="input-userid" value="9671619071" oninput="updateContent()">
+            </div>
+
+            <div class="cp-group">
+                <label>Date Range</label>
+                <input type="text" id="input-date" value="2026-06-22" oninput="updateContent()">
+            </div>
+
+            <div class="cp-section-title">Credit Scores</div>
+
+            <div class="cp-group">
+                <label>Credit Score (Puntuación de crédito)</label>
+                <input type="number" id="input-credit" value="80" oninput="updateContent()">
+            </div>
+
+            <div class="cp-group">
+                <label>Required Extra Score (Requerida)</label>
+                <input type="number" id="input-required" value="20" oninput="updateContent()">
+            </div>
+
+            <div class="cp-section-title">Financial Info</div>
+
+            <div class="cp-group">
+                <label>Payment Amount (Se debe pagar)</label>
+                <input type="text" id="input-payment" value="80000" oninput="updateContent()">
+            </div>
+
+            <div class="cp-group">
+                <label>Current Balance (Saldo actual)</label>
+                <input type="text" id="input-balance" value="217697.1" oninput="updateContent()">
+            </div>
+
+            <div class="cp-group">
+                <label>Processing Time (Minutos)</label>
+                <input type="text" id="input-time" value="15-20" oninput="updateContent()">
+            </div>
+
+            <div class="cp-section-title">Theme Colors</div>
+
+            <div class="cp-group">
+                <label>Primary Theme Color</label>
+                <input type="color" id="input-primary-color" value="#0046ad" onchange="updateColors()">
+            </div>
+
+            <div class="cp-group">
+                <label>Alert Header Color</label>
+                <input type="color" id="input-alert-color" value="#d91414" onchange="updateColors()">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ORIGINAL UI WORKSPACE -->
+    <aside class="sidebar" id="ui-sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-handshake"></i>
+            <span>mercado libre</span>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item"><i class="fa-regular fa-user"></i> Centro de miembros</li>
+            <li class="menu-item"><i class="fa-regular fa-star"></i> Centro de gestión</li>
+            <li class="menu-item"><i class="fa-regular fa-clipboard"></i> Centro de misión</li>
+            <li class="menu-item"><i class="fa-regular fa-square-plus"></i> Centro de solicitud</li>
+            <li class="menu-item"><i class="fa-regular fa-circle-question"></i> Solicitud de acceso</li>
+            <li class="menu-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir de la cuenta</li>
+            <li class="menu-item"><i class="fa-solid fa-gear"></i> Configuración</li>
+        </ul>
+    </aside>
+
+    <div class="main-wrapper">
+        
+        <header class="topbar" id="ui-topbar">
+            <div class="nav-item"><i class="fa-regular fa-file-lines"></i><span>Información</span></div>
+            <div class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Informes</span></div>
+            <div class="nav-item"><i class="fa-solid fa-bullhorn"></i><span>Anuncios Pedidos</span></div>
+            <div class="nav-item"><i class="fa-solid fa-database"></i><span>Base de datos</span></div>
+            <div class="nav-item"><i class="fa-solid fa-box-archive"></i><span>Archivar Pedidos</span></div>
+            <div class="nav-item"><i class="fa-solid fa-store"></i><span>Centro de agencias</span></div>
+            <div class="nav-item"><i class="fa-solid fa-user-gear"></i><span>Gestión de cuentas</span></div>
+            <div class="nav-item"><i class="fa-solid fa-receipt"></i><span>Registro de facturas</span></div>
+            <div class="nav-item"><i class="fa-solid fa-users"></i><span>Usuarios fondo</span></div>
+            <div class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Información crediticia</span></div>
+        </header>
+
+        <div class="filter-bar">
+            <span>Usuario:</span>
+            <input type="text" class="filter-input" id="view-top-userid" value="9671619071" style="width: 120px;" readonly>
+            <span style="margin-left: 15px;">Fecha:</span>
+            <input type="text" class="filter-input" id="view-top-date1" value="2026-06-22" style="width: 110px;" readonly>
+            <span>-</span>
+            <input type="text" class="filter-input" id="view-top-date2" value="2026-06-22" style="width: 110px;" readonly>
+            <button class="btn-query" id="ui-btn-query">Consulta</button>
+        </div>
+
+        <div class="content-container">
+            <div class="modal-card">
+                <div class="modal-header" id="ui-modal-header">
+                    <i class="fa-solid fa-circle-exclamation" style="font-size: 20px;"></i>
+                    <span>Indicación del sistema</span>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="info-pane">
+                        <div class="notice-title">
+                            Estimado usuario: <span class="highlight-blue ui-primary-text" id="view-user-title">9671619071</span>, ¡Por favor, tome nota!
+                        </div>
+                        
+                        <div class="details-list">
+                            <div>ID de usuario: <span class="highlight-blue ui-primary-text" id="view-userid">9671619071</span></div>
+                            <div>Puntuación de crédito: <span class="highlight-red ui-alert-text" id="view-credit">80</span> puntos</div>
+                            <div class="sub-text">(menos de <span class="highlight-red ui-alert-text">100</span> puntos, muy bajo)</div>
+                            <div>Puntuación suplementaria requerida: <span class="highlight-red ui-alert-text" id="view-required">20</span> punto</div>
+                            <div style="margin-top: 8px;">
+                                Se debe pagar <span class="highlight-red ui-alert-text" id="view-payment">80000</span> pesos a la cuenta del mercado libre para impulsar la puntuación.
+                            </div>
+                            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                            <div>El saldo de la cuenta actual es: <span class="highlight-blue ui-primary-text" id="view-balance">217697.1</span> pesos</div>
+                            <div>El monto total de la devolución es: <span class="highlight-blue ui-primary-text" id="view-refund">217697.1</span> pesos.</div>
+                            <div>El proceso de procesamiento tarda <span class="highlight-red ui-alert-text" id="view-time">15-20</span> minutos.</div>
+                        </div>
+
+                        <button class="btn-confirm" id="ui-btn-confirm">Confirmar</button>
+                    </div>
+
+                    <div class="warning-pane">
+                        <div class="warning-icon-wrapper">
+                            <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+                        </div>
+                        <div class="warning-title ui-alert-text">ATENCIÓN</div>
+                        <div class="warning-subtitle">Acción requerida</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-banner">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>El centro de evaluación de crédito Mercado Libre se basa en la política nacional de México para la defensa de los derechos de los comerciantes.</span>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT FOR REAL-TIME UPDATES -->
+    <script>
+        function updateContent() {
+            const userId = document.getElementById('input-userid').value;
+            const date = document.getElementById('input-date').value;
+            const credit = document.getElementById('input-credit').value;
+            const required = document.getElementById('input-required').value;
+            const payment = document.getElementById('input-payment').value;
+            const balance = document.getElementById('input-balance').value;
+            const time = document.getElementById('input-time').value;
+
+            // Update Header Inputs
+            document.getElementById('view-top-userid').value = userId;
+            document.getElementById('view-top-date1').value = date;
+            document.getElementById('view-top-date2').value = date;
+
+            // Update Modal Content
+            document.getElementById('view-user-title').innerText = userId;
+            document.getElementById('view-userid').innerText = userId;
+            document.getElementById('view-credit').innerText = credit;
+            document.getElementById('view-required').innerText = required;
+            document.getElementById('view-payment').innerText = payment;
+            document.getElementById('view-balance').innerText = balance;
+            document.getElementById('view-refund').innerText = balance;
+            document.getElementById('view-time').innerText = time;
+        }
+
+        function updateColors() {
+            const primaryColor = document.getElementById('input-primary-color').value;
+            const alertColor = document.getElementById('input-alert-color').value;
+
+            // Primary color elements
+            document.getElementById('ui-sidebar').style.backgroundColor = primaryColor;
+            document.getElementById('ui-topbar').style.backgroundColor = primaryColor;
+            document.getElementById('ui-btn-query').style.backgroundColor = primaryColor;
+            document.getElementById('ui-btn-confirm').style.backgroundColor = primaryColor;
+
+            const primaryTexts = document.querySelectorAll('.ui-primary-text');
+            primaryTexts.forEach(el => el.style.color = primaryColor);
+
+            // Alert color elements
+            document.getElementById('ui-modal-header').style.backgroundColor = alertColor;
+            
+            const alertTexts = document.querySelectorAll('.ui-alert-text');
+            alertTexts.forEach(el => el.style.color = alertColor);
+        }
+    </script>
+</body>
+</html>
