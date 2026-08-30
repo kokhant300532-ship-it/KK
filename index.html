@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Dashboard & Control Panel</title>
-    <!-- Font Awesome Icons -->
+    <title>Interactive Mercado Libre Control Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -23,7 +22,7 @@
 
         /* Control Panel Sidebar (Leftmost) */
         .control-panel {
-            width: 320px;
+            width: 340px;
             background-color: #ffffff;
             border-right: 2px solid #e2e8f0;
             display: flex;
@@ -50,15 +49,15 @@
         }
 
         .cp-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .cp-group label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #475569;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -78,15 +77,16 @@
         }
 
         .cp-section-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
-            color: #0f172a;
-            margin: 15px 0 10px 0;
-            padding-bottom: 5px;
+            color: #0046ad;
+            margin: 18px 0 10px 0;
+            padding-bottom: 4px;
             border-bottom: 2px solid #e2e8f0;
+            text-transform: uppercase;
         }
 
-        /* Original App Sidebar */
+        /* Workspace Sidebar */
         .sidebar {
             width: 210px;
             background-color: #0046ad;
@@ -207,7 +207,7 @@
         .modal-card {
             background: white;
             width: 100%;
-            max-width: 700px;
+            max-width: 720px;
             border-radius: 8px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             overflow: hidden;
@@ -217,7 +217,7 @@
         .modal-header {
             background-color: #d91414;
             color: white;
-            padding: 12px 20px;
+            padding: 14px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -328,7 +328,7 @@
         .footer-banner {
             background-color: #e8f2ff;
             color: #0046ad;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 12px;
             border-radius: 4px;
             margin: 20px 30px 20px 30px;
@@ -340,7 +340,6 @@
 </head>
 <body>
 
-    <!-- CONTROL PANEL (SETTINGS SIDEBAR) -->
     <div class="control-panel">
         <div class="cp-header">
             <i class="fa-solid fa-sliders"></i>
@@ -349,53 +348,62 @@
         <div class="cp-body">
             
             <div class="cp-section-title">User Details</div>
-            
             <div class="cp-group">
                 <label>User ID</label>
-                <input type="text" id="input-userid" value="9671619071" oninput="updateContent()">
+                <input type="text" id="input-userid" value="8155818109" oninput="updateContent()">
             </div>
-
             <div class="cp-group">
                 <label>Date Range</label>
-                <input type="text" id="input-date" value="2026-06-22" oninput="updateContent()">
+                <input type="text" id="input-date" value="2026-08-28" oninput="updateContent()">
             </div>
 
-            <div class="cp-section-title">Credit Scores</div>
-
+            <div class="cp-section-title">Credit & Thresholds</div>
             <div class="cp-group">
-                <label>Credit Score (Puntuación de crédito)</label>
-                <input type="number" id="input-credit" value="80" oninput="updateContent()">
+                <label>Current Score (Puntuación)</label>
+                <input type="number" id="input-credit" value="60" oninput="updateContent()">
             </div>
-
             <div class="cp-group">
-                <label>Required Extra Score (Requerida)</label>
+                <label>Threshold Limit (Limité)</label>
+                <input type="number" id="input-limit" value="80" oninput="updateContent()">
+            </div>
+            <div class="cp-group">
+                <label>Required Extra Score</label>
                 <input type="number" id="input-required" value="20" oninput="updateContent()">
             </div>
 
             <div class="cp-section-title">Financial Info</div>
-
             <div class="cp-group">
                 <label>Payment Amount (Se debe pagar)</label>
-                <input type="text" id="input-payment" value="80000" oninput="updateContent()">
+                <input type="text" id="input-payment" value="20,000" oninput="updateContent()">
             </div>
-
             <div class="cp-group">
                 <label>Current Balance (Saldo actual)</label>
-                <input type="text" id="input-balance" value="217697.1" oninput="updateContent()">
+                <input type="text" id="input-balance" value="47,747.9" oninput="updateContent()">
             </div>
-
+            <div class="cp-group">
+                <label>Total Refund (Monto devolución)</label>
+                <input type="text" id="input-refund" value="67,747.9" oninput="updateContent()">
+            </div>
             <div class="cp-group">
                 <label>Processing Time (Minutos)</label>
-                <input type="text" id="input-time" value="15-20" oninput="updateContent()">
+                <input type="text" id="input-time" value="5-10" oninput="updateContent()">
             </div>
 
-            <div class="cp-section-title">Theme Colors</div>
-
+            <div class="cp-section-title">Labels & Texts</div>
             <div class="cp-group">
-                <label>Primary Theme Color</label>
+                <label>Modal Title</label>
+                <input type="text" id="input-modal-title" value="Indicación del sistema" oninput="updateContent()">
+            </div>
+            <div class="cp-group">
+                <label>Footer Policy Text</label>
+                <input type="text" id="input-footer-text" value="El centro de evaluación de crédito Mercado Libre se basa en la política nacional de México para la defensa de los derechos de los comerciantes." oninput="updateContent()">
+            </div>
+
+            <div class="cp-section-title">Theme Customization</div>
+            <div class="cp-group">
+                <label>Primary Brand Color</label>
                 <input type="color" id="input-primary-color" value="#0046ad" onchange="updateColors()">
             </div>
-
             <div class="cp-group">
                 <label>Alert Header Color</label>
                 <input type="color" id="input-alert-color" value="#d91414" onchange="updateColors()">
@@ -404,7 +412,6 @@
         </div>
     </div>
 
-    <!-- ORIGINAL UI WORKSPACE -->
     <aside class="sidebar" id="ui-sidebar">
         <div class="brand">
             <i class="fa-solid fa-handshake"></i>
@@ -438,11 +445,11 @@
 
         <div class="filter-bar">
             <span>Usuario:</span>
-            <input type="text" class="filter-input" id="view-top-userid" value="9671619071" style="width: 120px;" readonly>
+            <input type="text" class="filter-input" id="view-top-userid" value="8155818109" style="width: 120px;" readonly>
             <span style="margin-left: 15px;">Fecha:</span>
-            <input type="text" class="filter-input" id="view-top-date1" value="2026-06-22" style="width: 110px;" readonly>
+            <input type="text" class="filter-input" id="view-top-date1" value="2026-08-28" style="width: 110px;" readonly>
             <span>-</span>
-            <input type="text" class="filter-input" id="view-top-date2" value="2026-06-22" style="width: 110px;" readonly>
+            <input type="text" class="filter-input" id="view-top-date2" value="2026-08-28" style="width: 110px;" readonly>
             <button class="btn-query" id="ui-btn-query">Consulta</button>
         </div>
 
@@ -450,27 +457,27 @@
             <div class="modal-card">
                 <div class="modal-header" id="ui-modal-header">
                     <i class="fa-solid fa-circle-exclamation" style="font-size: 20px;"></i>
-                    <span>Indicación del sistema</span>
+                    <span id="view-modal-header-text">Indicación del sistema</span>
                 </div>
                 
                 <div class="modal-body">
                     <div class="info-pane">
                         <div class="notice-title">
-                            Estimado usuario: <span class="highlight-blue ui-primary-text" id="view-user-title">9671619071</span>, ¡Por favor, tome nota!
+                            Estimado usuario: <span class="highlight-blue ui-primary-text" id="view-user-title">8155818109</span>, ¡Por favor, tome nota!
                         </div>
                         
                         <div class="details-list">
-                            <div>ID de usuario: <span class="highlight-blue ui-primary-text" id="view-userid">9671619071</span></div>
-                            <div>Puntuación de crédito: <span class="highlight-red ui-alert-text" id="view-credit">80</span> puntos</div>
-                            <div class="sub-text">(menos de <span class="highlight-red ui-alert-text">100</span> puntos, muy bajo)</div>
+                            <div>ID de usuario: <span class="highlight-blue ui-primary-text" id="view-userid">8155818109</span></div>
+                            <div>Puntuación de crédito: <span class="highlight-red ui-alert-text" id="view-credit">60</span> puntos</div>
+                            <div class="sub-text">(menos de <span class="highlight-red ui-alert-text" id="view-limit">80</span> puntos, muy bajo)</div>
                             <div>Puntuación suplementaria requerida: <span class="highlight-red ui-alert-text" id="view-required">20</span> punto</div>
                             <div style="margin-top: 8px;">
-                                Se debe pagar <span class="highlight-red ui-alert-text" id="view-payment">80000</span> pesos a la cuenta del mercado libre para impulsar la puntuación.
+                                Se debe pagar <span class="highlight-red ui-alert-text" id="view-payment">20,000</span> pesos a la cuenta del mercado libre para impulsar la puntuación.
                             </div>
                             <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
-                            <div>El saldo de la cuenta actual es: <span class="highlight-blue ui-primary-text" id="view-balance">217697.1</span> pesos</div>
-                            <div>El monto total de la devolución es: <span class="highlight-blue ui-primary-text" id="view-refund">217697.1</span> pesos.</div>
-                            <div>El proceso de procesamiento tarda <span class="highlight-red ui-alert-text" id="view-time">15-20</span> minutos.</div>
+                            <div>El saldo de la cuenta actual es: <span class="highlight-blue ui-primary-text" id="view-balance">47,747.9</span> pesos</div>
+                            <div>El monto total de la devolución es: <span class="highlight-blue ui-primary-text" id="view-refund">67,747.9</span> pesos.</div>
+                            <div>El proceso de procesamiento tarda <span class="highlight-red ui-alert-text" id="view-time">5-10</span> minutos.</div>
                         </div>
 
                         <button class="btn-confirm" id="ui-btn-confirm">Confirmar</button>
@@ -489,43 +496,49 @@
 
         <div class="footer-banner">
             <i class="fa-solid fa-circle-info"></i>
-            <span>El centro de evaluación de crédito Mercado Libre se basa en la política nacional de México para la defensa de los derechos de los comerciantes.</span>
+            <span id="view-footer-text">El centro de evaluación de crédito Mercado Libre se basa en la política nacional de México para la defensa de los derechos de los comerciantes.</span>
         </div>
 
     </div>
 
-    <!-- JAVASCRIPT FOR REAL-TIME UPDATES -->
     <script>
         function updateContent() {
             const userId = document.getElementById('input-userid').value;
             const date = document.getElementById('input-date').value;
             const credit = document.getElementById('input-credit').value;
+            const limit = document.getElementById('input-limit').value;
             const required = document.getElementById('input-required').value;
             const payment = document.getElementById('input-payment').value;
             const balance = document.getElementById('input-balance').value;
+            const refund = document.getElementById('input-refund').value;
             const time = document.getElementById('input-time').value;
+            const modalTitle = document.getElementById('input-modal-title').value;
+            const footerText = document.getElementById('input-footer-text').value;
 
-            // Update Header Inputs
+            // Update Top Filter Inputs
             document.getElementById('view-top-userid').value = userId;
             document.getElementById('view-top-date1').value = date;
             document.getElementById('view-top-date2').value = date;
 
-            // Update Modal Content
+            // Update Dynamic UI Content
             document.getElementById('view-user-title').innerText = userId;
             document.getElementById('view-userid').innerText = userId;
             document.getElementById('view-credit').innerText = credit;
+            document.getElementById('view-limit').innerText = limit;
             document.getElementById('view-required').innerText = required;
             document.getElementById('view-payment').innerText = payment;
             document.getElementById('view-balance').innerText = balance;
-            document.getElementById('view-refund').innerText = balance;
+            document.getElementById('view-refund').innerText = refund;
             document.getElementById('view-time').innerText = time;
+            document.getElementById('view-modal-header-text').innerText = modalTitle;
+            document.getElementById('view-footer-text').innerText = footerText;
         }
 
         function updateColors() {
             const primaryColor = document.getElementById('input-primary-color').value;
             const alertColor = document.getElementById('input-alert-color').value;
 
-            // Primary color elements
+            // Apply Primary Color Updates
             document.getElementById('ui-sidebar').style.backgroundColor = primaryColor;
             document.getElementById('ui-topbar').style.backgroundColor = primaryColor;
             document.getElementById('ui-btn-query').style.backgroundColor = primaryColor;
@@ -534,7 +547,7 @@
             const primaryTexts = document.querySelectorAll('.ui-primary-text');
             primaryTexts.forEach(el => el.style.color = primaryColor);
 
-            // Alert color elements
+            // Apply Alert Color Updates
             document.getElementById('ui-modal-header').style.backgroundColor = alertColor;
             
             const alertTexts = document.querySelectorAll('.ui-alert-text');
