@@ -72,6 +72,12 @@
             transition: border-color 0.2s;
         }
 
+        .cp-group input[type="file"] {
+            padding: 6px;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
         .cp-group input:focus {
             border-color: #0046ad;
         }
@@ -109,6 +115,12 @@
         .brand i {
             font-size: 26px;
             color: #ffdb00;
+        }
+
+        .brand img {
+            max-height: 60px;
+            max-width: 100%;
+            object-fit: contain;
         }
 
         .menu-list {
@@ -347,6 +359,15 @@
         </div>
         <div class="cp-body">
             
+            <div class="cp-section-title">BRAND & IMAGES</div>
+            <div class="cp-group">
+                <label>LOGO SOURCE</label>
+                <input type="file" id="input-logo-file" accept="image/*" onchange="handleFileUpload(event)">
+            </div>
+            <div class="cp-group">
+                <input type="text" id="input-logo-url" placeholder="Or paste Logo Image URL" oninput="handleUrlInput()">
+            </div>
+
             <div class="cp-section-title">User Details</div>
             <div class="cp-group">
                 <label>User ID</label>
@@ -413,8 +434,8 @@
     </div>
 
     <aside class="sidebar" id="ui-sidebar">
-        <div class="brand">
-            <i class="fa-solid fa-handshake"></i>
+        <div class="brand" id="ui-brand-container">
+            <i class="fa-solid fa-handshake" id="default-logo-icon"></i>
             <span>mercado libre</span>
         </div>
         <ul class="menu-list">
@@ -502,6 +523,37 @@
     </div>
 
     <script>
+        function setLogoImage(imageSrc) {
+            const brandContainer = document.getElementById('ui-brand-container');
+            if (imageSrc) {
+                brandContainer.innerHTML = `<img src="${imageSrc}" alt="Logo"> <span>mercado libre</span>`;
+            } else {
+                brandContainer.innerHTML = `<i class="fa-solid fa-handshake" id="default-logo-icon"></i> <span>mercado libre</span>`;
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('input-logo-url').value = ''; // URL field ကို ရှင်းထုတ်မည်
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    setLogoImage(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleUrlInput() {
+            const logoUrl = document.getElementById('input-logo-url').value.trim();
+            if (logoUrl !== '') {
+                document.getElementById('input-logo-file').value = ''; // File input ကို ရှင်းထုတ်မည်
+                setLogoImage(logoUrl);
+            } else {
+                setLogoImage(null);
+            }
+        }
+
         function updateContent() {
             const userId = document.getElementById('input-userid').value;
             const date = document.getElementById('input-date').value;
