@@ -410,8 +410,12 @@
                 <input type="text" id="input-userid" value="8155818109" oninput="updateContent()">
             </div>
             <div class="cp-group">
-                <label>Date Range</label>
-                <input type="text" id="input-date" value="2026-08-28" oninput="updateContent()">
+                <label>Start Date (Fecha Inicio)</label>
+                <input type="text" id="input-date1" value="2026-08-28" oninput="updateContent()">
+            </div>
+            <div class="cp-group">
+                <label>End Date (Fecha Fin)</label>
+                <input type="text" id="input-date2" value="2026-08-28" oninput="updateContent()">
             </div>
 
             <div class="cp-section-title">Credit & Thresholds</div>
@@ -592,7 +596,8 @@
 
         function updateContent() {
             const userId = document.getElementById('input-userid').value;
-            const date = document.getElementById('input-date').value;
+            const date1 = document.getElementById('input-date1').value;
+            const date2 = document.getElementById('input-date2').value;
             const credit = document.getElementById('input-credit').value;
             const limit = document.getElementById('input-limit').value;
             const required = document.getElementById('input-required').value;
@@ -603,10 +608,10 @@
             const modalTitle = document.getElementById('input-modal-title').value;
             const footerText = document.getElementById('input-footer-text').value;
 
-            // Update Top Filter Inputs
+            // Update Top Filter Inputs separately
             document.getElementById('view-top-userid').value = userId;
-            document.getElementById('view-top-date1').value = date;
-            document.getElementById('view-top-date2').value = date;
+            document.getElementById('view-top-date1').value = date1;
+            document.getElementById('view-top-date2').value = date2;
 
             // Update Dynamic UI Content
             document.getElementById('view-user-title').innerText = userId;
