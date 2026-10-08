@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Mercado Libre Control Panel</title>
-    <!-- Google Font: Inter for crisp and uniform typography -->
+    <!-- Google Font: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
             color: #1e293b;
         }
 
-        /* Control Panel Sidebar (Leftmost) */
+        /* Control Panel Sidebar (Leftmost) - Can be hidden */
         .control-panel {
             width: 340px;
             background-color: #ffffff;
@@ -37,6 +37,12 @@
             flex-direction: column;
             z-index: 10;
             box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .control-panel.hidden {
+            display: none;
         }
 
         .cp-header {
@@ -156,6 +162,13 @@
 
         .menu-item:hover {
             background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        /* Active Menu Item Styling */
+        .menu-item.active {
+            background-color: rgba(0, 0, 0, 0.25);
+            border-left: 4px solid #ffdb00;
+            padding-left: 16px;
         }
 
         /* Main Workspace Section */
@@ -388,7 +401,8 @@
 </head>
 <body>
 
-    <div class="control-panel">
+    <!-- Control Panel Sidebar (Leftmost) -->
+    <div class="control-panel hidden" id="ui-control-panel">
         <div class="cp-header">
             <i class="fa-solid fa-sliders"></i>
             <span>Live Control Settings</span>
@@ -473,22 +487,38 @@
         </div>
     </div>
 
+    <!-- Workspace Sidebar -->
     <aside class="sidebar" id="ui-sidebar">
         <div class="brand" id="ui-brand-container">
             <i class="fa-solid fa-handshake" id="default-logo-icon"></i>
             <span>mercado libre</span>
         </div>
         <ul class="menu-list">
-            <li class="menu-item"><i class="fa-regular fa-user"></i> Centro de miembros</li>
-            <li class="menu-item"><i class="fa-regular fa-star"></i> Centro de gestión</li>
-            <li class="menu-item"><i class="fa-regular fa-clipboard"></i> Centro de misión</li>
-            <li class="menu-item"><i class="fa-regular fa-square-plus"></i> Centro de solicitud</li>
-            <li class="menu-item"><i class="fa-regular fa-circle-question"></i> Solicitud de acceso</li>
-            <li class="menu-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir de la cuenta</li>
-            <li class="menu-item"><i class="fa-solid fa-gear"></i> Configuración</li>
+            <li class="menu-item active" onclick="showMemberCenter(this)">
+                <i class="fa-regular fa-user"></i> Centro de miembros
+            </li>
+            <li class="menu-item" onclick="activateMenu(this)">
+                <i class="fa-regular fa-star"></i> Centro de gestión
+            </li>
+            <li class="menu-item" onclick="activateMenu(this)">
+                <i class="fa-regular fa-clipboard"></i> Centro de misión
+            </li>
+            <li class="menu-item" onclick="activateMenu(this)">
+                <i class="fa-regular fa-square-plus"></i> Centro de solicitud
+            </li>
+            <li class="menu-item" onclick="activateMenu(this)">
+                <i class="fa-regular fa-circle-question"></i> Solicitud de acceso
+            </li>
+            <li class="menu-item" onclick="activateMenu(this)">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Salir de la cuenta
+            </li>
+            <li class="menu-item" onclick="toggleControlPanel(this)">
+                <i class="fa-solid fa-gear"></i> Configuración
+            </li>
         </ul>
     </aside>
 
+    <!-- Main Workspace Section -->
     <div class="main-wrapper">
         
         <header class="topbar" id="ui-topbar">
@@ -645,6 +675,25 @@
             
             const alertTexts = document.querySelectorAll('.ui-alert-text');
             alertTexts.forEach(el => el.style.color = alertColor);
+        }
+
+        // Functions for interactive UI menu navigation
+        function showMemberCenter(element) {
+            activateMenu(element);
+            // Hide Control Panel when viewing Member Center
+            document.getElementById('ui-control-panel').classList.add('hidden');
+        }
+
+        function toggleControlPanel(element) {
+            activateMenu(element);
+            // Toggle Control Panel for Settings
+            document.getElementById('ui-control-panel').classList.toggle('hidden');
+        }
+
+        function activateMenu(element) {
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
         }
     </script>
 </body>
