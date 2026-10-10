@@ -402,7 +402,7 @@
 <body>
 
     <!-- Control Panel Sidebar (Leftmost) -->
-    <div class="control-panel hidden" id="ui-control-panel">
+    <div class="control-panel" id="ui-control-panel">
         <div class="cp-header">
             <i class="fa-solid fa-sliders"></i>
             <span>Live Control Settings</span>
@@ -680,8 +680,8 @@
         // Functions for interactive UI menu navigation
         function showMemberCenter(element) {
             activateMenu(element);
-            // Hide Control Panel when viewing Member Center
-            document.getElementById('ui-control-panel').classList.add('hidden');
+            // Show Control Panel when viewing Member Center
+            document.getElementById('ui-control-panel').classList.remove('hidden');
         }
 
         function toggleControlPanel(element) {
